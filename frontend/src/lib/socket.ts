@@ -4,17 +4,8 @@ import {handleChatStream} from "$lib/store/chat";
 type Message = Record<string, unknown>;
 
 export const WEBSOCKET_URL = 'ws://localhost:3000/ws';
-
 export const isConnected = writable(false);
 export const messages = writable<Message[]>([]);
-export const responseString = writable('');
-
-type ChatMessage = {
-    response: string;
-    done: boolean;
-};
-export const chatMessages = writable<ChatMessage[]>([]);
-let currentMessageIndex = -1;
 
 let ws: WebSocket | null = null;
 
@@ -29,6 +20,7 @@ const handleClose = () => {
     console.log('WebSocket connection closed');
 }
 
+export const isChatting = writable(false);
 const handleMessage = (event: MessageEvent) => {
     const data = JSON.parse(event.data);
     if(['CHAT_START', 'CHAT_STREAM', 'CHAT_END', 'CHAT_METADATA'].includes(data.type)){

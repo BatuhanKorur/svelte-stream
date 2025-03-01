@@ -11,3 +11,8 @@ export const { cva, cx, compose } = defineConfig({
         onComplete: className => twMerge(className),
     },
 })
+
+export const readableSeconds = (value: number): string => {
+  const truncated = Math.floor(value * 100) / 100;
+  return `${truncated} seconds`;
+}

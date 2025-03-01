@@ -1,44 +1,34 @@
-<script lang="ts">
-    let { children } = $props();
-    import { browser } from '$app/environment'
-    import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
-
+<script lang="ts" xmlns="http://www.w3.org/1999/html">
     import '../app.css';
+    import { isConnected, connect, disconnect } from '$lib/socket'
 
-    import { isConnected, connect, disconnect, messages, WEBSOCKET_URL } from '$lib/socket'
-    import Logs from "$lib/components/Logs.svelte";
-    import SocketCard from "$lib/components/SocketCard.svelte";
-
+    let { children } = $props();
 
     function toggleConnection() {
-        console.log('Hello')
-        if ($isConnected) {
-            disconnect()
-        } else {
-            connect()
-        }
+      $isConnected ? disconnect() : connect()
     }
-
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                enabled: browser,
-            },
-        },
-    })
 </script>
-<QueryClientProvider client={queryClient}>
-<div class="bg-zinc-950 min-h-screen h-full flex flex-col">
-    <div class="border-b h-12 flex items-center px-4">
-        <button class="flex items-center space-x-3" onclick={toggleConnection}>
-            <p class="leading-4">Socket</p>
-            {#if $isConnected}
-                <div class="size-3 bg-emerald-400 rounded-full"></div>
-            {:else}
-                <div class="size-3 bg-rose-400 rounded-full"></div>
-            {/if}
+
+{#snippet link(label, href)}
+  <a href={href} class="text-[15px] leading-none mr-4 py-2 transition duration-200 ease-in-out hover:text-blue-300">
+    {label}
+  </a>
+{/snippet}
+
+  <div class="bg-zinc-950 min-h-screen h-full flex flex-col">
+      <div class="border-b h-12 flex items-center px-3">
+        <div class="grow">
+          {@render link('Logs', '/logs')}
+          {@render link('Chat', '/chat')}
+        </div>
+        <button class="flex items-center space-x-2 h-7 px-2 bg-zinc-800/75 rounded-xl transition duration-200 ease-in-out cursor-pointer hover:opacity-80" onclick={toggleConnection}>
+          <span class="text-[14px] leading-none font-medium opacity-75 ">Socket</span>
+          {#if $isConnected}
+            <span class="size-3 bg-emerald-400 rounded-full"></span>
+          {:else}
+            <span class="size-3 bg-rose-400 rounded-full"></span>
+          {/if}
         </button>
-    </div>
-    {@render children()}
-</div>
-</QueryClientProvider>
+      </div>
+      {@render children()}
+  </div>

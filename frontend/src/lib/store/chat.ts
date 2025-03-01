@@ -6,12 +6,15 @@ type ChatMessage = {
     info?: any;
 }
 
+export const selectedModel = writable<string | null>(null);
 export const chatMessages = writable<ChatMessage[]>([]);
+export const isChatting = writable(false);
 let currentIndex = -1;
 
 export const handleChatStream = (data: { type: string, message: string | {}, info: any }) => {
     switch (data.type) {
         case 'CHAT_START':
+            isChatting.set(true);
             chatMessages.update((msgs) => {
                 msgs.push({
                     response: '',
@@ -40,6 +43,7 @@ export const handleChatStream = (data: { type: string, message: string | {}, inf
             });
             break;
         case 'CHAT_END':
+          isChatting.set(false);
             chatMessages.update((msgs) => {
                 if (currentIndex >= 0) {
                     msgs[currentIndex].done = true;
