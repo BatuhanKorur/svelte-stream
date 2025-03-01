@@ -22,17 +22,26 @@
         console.log('Hello', event);
     }
 </script>
-<div class="grow h-full mx-2 relative">
-    <div>
+<div class="grow h-full relative flex flex-col">
+    <div class="border-b shrink-0">
+        <p class="text-2xl">Chat</p>
+    </div>
+    <div class="grow overflow-y-auto">
         {#each $chatMessages as resp}
             <p>{resp.response}</p>
+            {#if resp.done}
+                <div>
+                    <span>Tokens {resp.info.tokens_count}</span>
+                    <span>Duration { resp.info.total_duration }</span>
+                </div>
+            {/if}
         {/each}
     </div>
-    <div class="absolute w-full px-3 py-4 bottom-0">
+    <div class="shrink-0 border-t p-3">
         <input
                 bind:value={msg}
                 type="text"
-                class=" w-full bg-white/5 h-10 rounded-md px-3 placeholder:text-sm"
+                class=" w-full bg-zinc-800 h-10 rounded-md px-3 placeholder:text-sm"
                 placeholder="Type a message"
                 onkeydown={onKeyDown}/>
     </div>

@@ -31,7 +31,7 @@ const handleClose = () => {
 
 const handleMessage = (event: MessageEvent) => {
     const data = JSON.parse(event.data);
-    if(['CHAT_START', 'CHAT_STREAM', 'CHAT_END'].includes(data.type)){
+    if(['CHAT_START', 'CHAT_STREAM', 'CHAT_END', 'CHAT_METADATA'].includes(data.type)){
         handleChatStream(data);
     } else {
         console.log('Unknown message type:', data.type);

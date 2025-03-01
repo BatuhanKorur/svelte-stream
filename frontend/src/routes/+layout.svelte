@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Nav from "$lib/components/Nav.svelte";
-    import * as Resizable from '$lib/ui/resizable/index'
     let { children } = $props();
     import { browser } from '$app/environment'
     import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
@@ -30,23 +28,17 @@
     })
 </script>
 <QueryClientProvider client={queryClient}>
-<div class="bg-zinc-950 min-h-screen h-full">
-        <Resizable.PaneGroup direction="horizontal" class="min-h-screen h-full items-stretch">
-            <Resizable.Pane
-                    defaultSize={350}
-                    collapsedSize={4}
-                    collapsible
-                    minSize={14}
-                    maxSize={24}
-                    class="p-2 border-r"
-            >
-                <SocketCard toggle={toggleConnection}/>
-            </Resizable.Pane>
-            <Resizable.Handle withHandle></Resizable.Handle>
-            <Resizable.Pane defaultSize={440} minSize={30} class="bg-zinc-900">
-                {@render children()}
-            </Resizable.Pane>
-        </Resizable.PaneGroup>
-
+<div class="bg-zinc-950 min-h-screen h-full flex flex-col">
+    <div class="border-b h-12 flex items-center px-4">
+        <button class="flex items-center space-x-3" onclick={toggleConnection}>
+            <p class="leading-4">Socket</p>
+            {#if $isConnected}
+                <div class="size-3 bg-emerald-400 rounded-full"></div>
+            {:else}
+                <div class="size-3 bg-rose-400 rounded-full"></div>
+            {/if}
+        </button>
+    </div>
+    {@render children()}
 </div>
 </QueryClientProvider>

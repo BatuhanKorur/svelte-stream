@@ -4,6 +4,7 @@ import { createBunWebSocket } from 'hono/bun'
 import type { ServerWebSocket } from 'bun'
 import { sendLog } from './broadcast'
 import {OllamaService} from "./service/OllamaService";
+import {nanoToSeconds, tokensPerSecond} from "./lib/utils";
 
 const { upgradeWebSocket, websocket } = createBunWebSocket<ServerWebSocket>()
 const app = new Hono()
@@ -54,10 +55,18 @@ app.get(
                 const { type, message } = JSON.parse(event.data as string);
                 const handlers = {
                     AI: async (msg: string) => {
-                        console.log('OK, processing your request...', type, message)
-                        ws.send(JSON.stringify({ type: 'CHAT_START', message: 'Processing your request...' }));
+                        ws.send(JSON.stringify({ type: 'CHAT_START', message: 'Starting response' }));
                         for await (const chunk of OllamaService.streamChatResponse(msg)) {
-                            if (chunk.response) {
+                            if(chunk.done){
+                                ws.send(JSON.stringify({ type: 'CHAT_METADATA', message: {
+                                        created_at: chunk.created_at,
+                                        tokens_count: chunk.eval_count,
+                                        load_duration: nanoToSeconds(chunk.load_duration),
+                                        total_duration: nanoToSeconds(chunk.total_duration),
+                                }
+                                }));
+                            }
+                            else if (chunk.response) {
                                 ws.send(JSON.stringify({ type: 'CHAT_STREAM', message: chunk.response }));
                             }
                         }

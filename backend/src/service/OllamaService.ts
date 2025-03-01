@@ -9,6 +9,8 @@ export class OllamaService {
             body: JSON.stringify(body),
         });
 
+        console.log('Response:', response);
+
         if (!response.ok) {
             throw new Error(`Ollama API error: ${response.statusText}`);
         }
@@ -25,12 +27,12 @@ export class OllamaService {
     }
 
     public static async* streamChatResponse(prompt: string, model: string = 'mistral') {
-        console.log('HEllo')
         const response = await this.postRequest('generate', {
             model,
             prompt,
             stream: true,
         });
+
 
         if (!response.body) {
             throw new Error('No response body');
@@ -38,17 +40,22 @@ export class OllamaService {
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+        console.log(reader);
 
         try {
             while (true) {
                 const { done, value } = await reader.read();
-                if (done) break;
+                if (done) {
+                    break;
+                }
 
                 const chunk = decoder.decode(value);
+                console.log('Received response chunk:', chunk);
                 const lines = chunk.split('\n');
 
                 for (const line of lines) {
                     if (line.trim() !== '') {
+                        console.log('Yelded line:', JSON.parse(line));
                         yield JSON.parse(line);
                     }
                 }
