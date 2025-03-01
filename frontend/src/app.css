@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-zinc-800, currentColor);
+    }
+    * {
+        font-family: 'Geist', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    html {
+        -webkit-text-size-adjust: 100%;
+        font-variation-settings: normal;
+        scrollbar-color: var(--color-zinc-600);
+    }
+    body {
+        font-feature-settings: "rlig" 1, "calt" 1;
+
+    }
+
+    --text-base: 15px;
+    --text-base--line-height: 20px;
+}
+
+body {
+    color: var(--color-zinc-50);
+}

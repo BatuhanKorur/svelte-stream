@@ -1,0 +1,12 @@
+{
+  "name": "fuu-socket",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "hono": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.4"
+  }
+}
