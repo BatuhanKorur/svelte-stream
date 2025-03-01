@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import {handleChatStream} from "$lib/store/chat";
 
 type Message = Record<string, unknown>;
 
@@ -7,6 +8,13 @@ export const WEBSOCKET_URL = 'ws://localhost:3000/ws';
 export const isConnected = writable(false);
 export const messages = writable<Message[]>([]);
 export const responseString = writable('');
+
+type ChatMessage = {
+    response: string;
+    done: boolean;
+};
+export const chatMessages = writable<ChatMessage[]>([]);
+let currentMessageIndex = -1;
 
 let ws: WebSocket | null = null;
 
@@ -23,26 +31,15 @@ const handleClose = () => {
 
 const handleMessage = (event: MessageEvent) => {
     const data = JSON.parse(event.data);
-    console.log(data);
-    switch (data.type) {
-        case 'CHAT_START':
-            responseString.set(''); // Clear the response at the start
-            break;
-        case 'CHAT_STREAM':
-            responseString.update(value => value + data.message);
-            break;
-        case 'CHAT_END':
-            break;
-        default:
-            console.log('Unknown message type:', data.type);
-            break;
+    if(['CHAT_START', 'CHAT_STREAM', 'CHAT_END'].includes(data.type)){
+        handleChatStream(data);
+    } else {
+        console.log('Unknown message type:', data.type);
     }
-
     messages.update(items => {
         items.push(JSON.parse(event.data));
         return items;
     });
-    console.log('Messages:', messages);
 }
 
 const sendMessage = (message: Message) => {
@@ -54,7 +51,7 @@ const sendMessage = (message: Message) => {
 };
 
 export const socket = {
-    sendMessage,
+    send: sendMessage,
 }
 
 export const connect = () => {
