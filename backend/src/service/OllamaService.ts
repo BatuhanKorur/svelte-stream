@@ -70,7 +70,7 @@ export class OllamaService {
     }
 
     public static async listRunningModels() {
-        return await this.getRequest('/running');
+        return await this.getRequest('/ps');
     }
 }
 

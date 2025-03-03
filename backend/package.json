@@ -1,7 +1,8 @@
 {
   "name": "fuu-socket",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "dev:server": "bun run --watch src/server.ts"
   },
   "dependencies": {
     "hono": "^4.7.2"
