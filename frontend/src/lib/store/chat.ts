@@ -6,7 +6,9 @@ type ChatMessage = {
     info?: any;
 }
 
+export const models = writable<any[]>([]);
 export const selectedModel = writable<string | null>(null);
+
 export const chatMessages = writable<ChatMessage[]>([]);
 export const isChatting = writable(false);
 let currentIndex = -1;
