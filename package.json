@@ -1,15 +1,21 @@
 {
-  "name": "fuu-socket",
+  "name": "svelte-stream",
+  "description": "Ollama API web socket integration with Svelte, Bun and Hono",
+  "author": "Batuhan Korur <mail@batuhan.io> (https://batuhan.io)",
+  "license": "MIT",
   "version": "1.0.0",
-  "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "svelte",
+    "bun",
+    "hono",
+    "ollama",
+    "websockets"
+  ],
   "packageManager": "pnpm@10.4.1",
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -1,11 +1,6 @@
-To install dependencies:
-```sh
-bun install
-```
+## Svelte Stream
 
-To run:
-```sh
-bun run dev
-```
+A minor project / example testing the use of web sockets with svelte. Backend is a simple bun.js server with hono
+framework.
 
-open http://localhost:3000
+* UI interface interacting with Ollama API send streaming responses via websockets. 
